@@ -2,14 +2,14 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   labels:
-    run: cphtestp
-  name: cphtestp
+    run: cphtestp-2-1
+  name: cphtestp-2-1
   namespace: cph-test
 spec:
   template:
     metadata:
       labels:
-        run: cphtestp
+        run: cphtestp-2-1
     spec:
       containers:
       - env:
