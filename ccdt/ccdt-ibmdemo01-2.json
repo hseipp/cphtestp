@@ -5,7 +5,7 @@
         {
           "description": "NWG-MG"
         },  
-        "name": "IBMDEMO01.1.SVRCONN",
+        "name": "IBMDEMO01.2.SVRCONN",
         "clientConnection": {
           "connection": [
             {
@@ -25,7 +25,7 @@
         {
           "description": "NWG-MM"
         },  
-        "name": "IBMDEMO01.1.SVRCONN",
+        "name": "IBMDEMO01.2.SVRCONN",
         "clientConnection": {
           "connection": [
             {
