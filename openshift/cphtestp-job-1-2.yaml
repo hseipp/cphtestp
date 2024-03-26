@@ -15,22 +15,20 @@ spec:
       - env:
         - name: LICENSE
           value: accept
-        - name: MQ_QMGR_NAME
-          value: IBMDEMO01
-        - name: MQ_QMGR_CHANNEL
-          value: IBMDEMO01.1.SVRCONN
-        - name: MQ_RESPONDER_THREADS
-          value: "10"
-        - name: MQ_NON_PERSISTENT
-          value: "0"
-        - name: MQ_CCDT
-          value: ccdt-ibmdemo01-1
         - name: MQ_TLS_SNI_HOSTNAME
           value: "TRUE"
         - name: MQ_TLS_CIPHER
           value: TLS_RSA_WITH_AES_256_GCM_SHA384
         - name: MQ_AUTORECONNECT
           value: MQCNO_RECONNECT
+        - name: MQ_RESPONDER_THREADS
+          value: "20"
+        - name: MQ_NON_PERSISTENT
+          value: "0"
+        - name: MQ_CCDT
+          value: ccdt-ibmdemo01-2
+        - name: MQ_QMGR_NAME
+          value: IBMDEMO01
         image: docker.io/ldesrosi/cphtestp
         imagePullPolicy: Always
         name: cphtestp
