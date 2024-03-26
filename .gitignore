@@ -13,6 +13,7 @@ mqlicense.sh
 #Ignore misc
 results
 /unzip*
+.DS_Store
 
 #Ignore keystores
 /ssl/*

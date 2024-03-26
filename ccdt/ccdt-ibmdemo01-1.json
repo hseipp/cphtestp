@@ -1,0 +1,44 @@
+{
+    "channel": [
+      {
+        "general":
+        {
+          "description": "NWG-MG"
+        },  
+        "name": "IBMDEMO01.1.SVRCONN",
+        "clientConnection": {
+          "connection": [
+            {
+              "host": "ibmdemo01-ibm-mq-qm-mq-operator-dr.apps.mg.ibmlab.de",
+              "port": 443
+            }
+          ],
+          "queueManager": "IBMDEMO01"
+        },
+        "transmissionSecurity": {
+          "cipherSpecification" : "TLS_RSA_WITH_AES_256_GCM_SHA384"
+        },
+        "type": "clientConnection"
+      },
+      {
+        "general":
+        {
+          "description": "NWG-MM"
+        },  
+        "name": "IBMDEMO01.1.SVRCONN",
+        "clientConnection": {
+          "connection": [
+            {
+              "host": "ibmdemo01-ibm-mq-qm-mq-operator-dr.apps.mm.ibmlab.de",
+              "port": 443
+            }
+          ],
+          "queueManager": "IBMDEMO01"
+        },
+        "transmissionSecurity": {
+          "cipherSpecification" : "TLS_RSA_WITH_AES_256_GCM_SHA384"
+        },
+        "type": "clientConnection"
+      }
+    ]
+  }

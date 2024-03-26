@@ -62,7 +62,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   && useradd --system --uid 1000 --gid mqm mqperf \
   && usermod -a -G root mqperf \
   && echo mqperf:orland02 | chpasswd \
-  && mkdir -p /home/mqperf/cph \
+  && mkdir -p /home/mqperf/cph/ccdt \
   && chown -R mqperf:root /home/mqperf/cph \
   && chmod -R g+w /home/mqperf/cph \
   && echo "cd ~/cph" >> /home/mqperf/.bashrc \
@@ -70,18 +70,22 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 RUN export DEBIAN_FRONTEND=noninteractive \
   && ./mqlicense.sh -accept \
-  && dpkg -i ibmmq-runtime_9.3.2.0_amd64.deb \
-  && dpkg -i ibmmq-gskit_9.3.2.0_amd64.deb \
-  && dpkg -i ibmmq-client_9.3.2.0_amd64.deb \
-  && chown -R mqperf:root /opt/mqm/* \
-  && chown -R mqperf:root /var/mqm/* \
-  && chmod o+w /var/mqm
+  && dpkg -i ibmmq-runtime_9.3.5.0_amd64.deb \
+  && dpkg -i ibmmq-gskit_9.3.5.0_amd64.deb \
+  && dpkg -i ibmmq-client_9.3.5.0_amd64.deb 
 
 COPY cph/* /home/mqperf/cph/
 COPY ssl/* /opt/mqm/ssl/
 COPY *.sh /home/mqperf/cph/
 COPY *.mqsc /home/mqperf/cph/
 COPY qmmonitor2 /home/mqperf/cph/
+COPY ccdt/* /home/mqperf/cph/ccdt/
+
+RUN chown -R mqperf:root /opt/mqm/* \
+  && chown -R mqperf:root /var/mqm/* \
+  && chown -R mqperf:root /opt/mqm/ssl \
+  && chmod o+w /var/mqm
+
 USER mqperf
 WORKDIR /home/mqperf/cph
 
@@ -93,5 +97,7 @@ ENV MQ_QMGR_QREPLY_PREFIX=REPLY
 ENV MQ_NON_PERSISTENT=
 ENV MQ_CPH_EXTRA=
 ENV MQ_USERID=
+ENV MQ_CCDT=
+ENV MQ_RESPONDER_THREADS=2
 
 ENTRYPOINT ["./cphTest.sh"]

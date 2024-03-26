@@ -1,7 +1,7 @@
 #!/bin/bash
 export BINDINGS=mqc
 
-threads=${1:-1}
+threads=${MQ_THREAD:-1}
 msgsize=${2:-2048}
 host="${MQ_QMGR_HOSTNAME:-localhost}"
 qmname="${MQ_QMGR_NAME:-PERF0}"
@@ -15,6 +15,10 @@ password="${MQ_PASSWORD}"
 nonpersistent="${MQ_NON_PERSISTENT:-0}"
 runlength="${MQ_RUNLENGTH:-90}"
 reconnect="${MQ_AUTORECONNECT:-MQCNO_RECONNECT_DISABLED}"
+ccdt="${MQ_CCDT}"
+
+echo "${ccdt}"
+echo "URL = file:///home/mqperf/cph/ccdt/${ccdt}.json"
 
 
 if [ "${nonpersistent}" -eq 1 ]; then
@@ -25,7 +29,7 @@ fi
 
 
 if [ -n "${MQ_USERID}" ]; then
-  ./cph -nt $threads -ms $msgsize -rl $runlength -id 1 -tc Requester -ss 10 -iq $requestq -oq $replyq -db 1 -dx 10 -jp $port -jc $channel -jb $qmname -jt $BINDINGS -jh $host -wi 10 -to 30 $persistent_flags -ar $reconnect -us $userid -pw $password $extra -jl ${MQ_TLS_CIPHER} -jw ${MQ_TLS_CERTLABEL}
+  ./cph -ccdt "file:///home/mqperf/cph/ccdt/${ccdt}.json" -nt $threads -vo 4 -ve 4 -ms $msgsize -rl $runlength -id 1 -tc Requester -ss 10 -iq $requestq -oq $replyq -db 1 -dx 2 -jb $qmname -jt $BINDINGS -wi 10 -to 30 $persistent_flags -ar $reconnect -tc ReconnectTimer -us $userid -pw $password $extra -jw ${MQ_TLS_CERTLABEL}
 else
-  ./cph -nt $threads -ms $msgsize -rl $runlength -id 1 -tc Requester -ss 10 -iq $requestq -oq $replyq -db 1 -dx 10 -jp $port -jc $channel -jb $qmname -jt $BINDINGS -jh $host -wi 10 -to 30 $persistent_flags -ar $reconnect $extra -jl ${MQ_TLS_CIPHER} -jw ${MQ_TLS_CERTLABEL}
+  ./cph -ccdt "file:///home/mqperf/cph/ccdt/${ccdt}.json" -nt $threads -vo 4 -ve 4 -ms $msgsize -rl $runlength -id 1 -tc Requester -ss 10 -iq $requestq -oq $replyq -db 1 -dx 2 -jb $qmname -jt $BINDINGS -wi 10 -to 30 $persistent_flags -ar $reconnect -tc ReconnectTimer $extra -jw ${MQ_TLS_CERTLABEL}
 fi
