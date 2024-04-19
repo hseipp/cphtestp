@@ -12,9 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:22.04
+FROM docker.io/ubuntu:22.04
 
 LABEL maintainer "Sam Massey <smassey@uk.ibm.com>"
+
+ARG TARGETPLATFORM
+RUN export TARGET=`echo ${TARGETPLATFORM} | awk '{print substr($0, 7)}'` && echo "Target Platform:" $TARGETPLATFORM "- short:" $TARGET
 
 COPY *.deb /
 COPY mqlicense.sh /
@@ -69,10 +72,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   && service pmcd start
 
 RUN export DEBIAN_FRONTEND=noninteractive \
+  && export TARGET=`echo ${TARGETPLATFORM} | awk '{print substr($0, 7)}'` \
   && ./mqlicense.sh -accept \
-  && dpkg -i ibmmq-runtime_9.3.5.0_amd64.deb \
-  && dpkg -i ibmmq-gskit_9.3.5.0_amd64.deb \
-  && dpkg -i ibmmq-client_9.3.5.0_amd64.deb 
+  && dpkg -i ibmmq-runtime_9.3.5.0_${TARGET}.deb \
+  && dpkg -i ibmmq-gskit_9.3.5.0_${TARGET}.deb \
+  && dpkg -i ibmmq-client_9.3.5.0_${TARGET}.deb
 
 COPY cph/* /home/mqperf/cph/
 COPY ssl/* /opt/mqm/ssl/
