@@ -7,8 +7,8 @@
 *.tar
 
 #Ignore MQ license code
-/lap/
-mqlicense.sh
+/lap*/
+mqlicense*.sh
 
 #Ignore misc
 results

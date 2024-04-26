@@ -12,7 +12,41 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.io/ubuntu:22.04
+FROM --platform=$TARGETPLATFORM docker.io/ubuntu:22.04 as build-stage
+
+ARG TARGETPLATFORM
+RUN export TARGET=`echo ${TARGETPLATFORM} | awk '{print substr($0, 7)}'` && echo "Target Platform:" $TARGETPLATFORM "- short:" $TARGET
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+  # Install additional packages - do we need/want them all
+  && apt-get update -y \
+  && apt-get install -y --no-install-recommends \
+    build-essential \
+    g++ \
+    git \
+    ca-certificates
+
+COPY *.deb /
+COPY mqlicense.sh /
+COPY lap /lap
+
+# Install runtime and SDK for building cph
+# Install gskit to create the certificate database
+#   see https://www.ibm.com/docs/en/ibm-mq/9.3?topic=windows-setting-up-key-repository-aix-linux
+RUN export DEBIAN_FRONTEND=noninteractive \
+  && export TARGET=`echo ${TARGETPLATFORM} | awk '{print substr($0, 7)}'` \
+  && echo "Target Platform:" $TARGETPLATFORM "- short:" $TARGET \
+  && ./mqlicense.sh -accept \
+  && dpkg -i ibmmq-runtime_9.3.5.0_${TARGET}.deb \
+  && dpkg -i ibmmq-gskit_9.3.5.0_${TARGET}.deb \
+  && dpkg -i ibmmq-sdk_9.3.5.0_${TARGET}.deb
+
+RUN git clone https://github.com/ibm-messaging/mq-cph.git
+
+# The cphtestp project uses an April 5, 2022 cph build
+RUN cd /mq-cph && git checkout -b 20220405 f00f1a83f06717ccaaa50def332ae26a8d601404 && export installdir=/mq-cph && make
+
+FROM --platform=$TARGETPLATFORM docker.io/ubuntu:22.04 as production-stage
 
 LABEL maintainer "Sam Massey <smassey@uk.ibm.com>"
 
@@ -79,6 +113,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   && dpkg -i ibmmq-client_9.3.5.0_${TARGET}.deb
 
 COPY cph/* /home/mqperf/cph/
+COPY --from=build-stage /mq-cph/cph /home/mqperf/cph/cph
 COPY ssl/* /opt/mqm/ssl/
 COPY *.sh /home/mqperf/cph/
 COPY *.mqsc /home/mqperf/cph/
