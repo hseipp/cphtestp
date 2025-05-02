@@ -1,0 +1,44 @@
+{
+    "channel": [
+      {
+        "general":
+        {
+          "description": "NWG-OCPZ1"
+        },  
+        "name": "APPQMGR2.2.SVRCONN",
+        "clientConnection": {
+          "connection": [
+            {
+              "host": "appqmgr2-ibm-mq-qm-app-qmgr02.apps.ocpz1.ibmlab.de",
+              "port": 443
+            }
+          ],
+          "queueManager": "APPQMGR2"
+        },
+        "transmissionSecurity": {
+          "cipherSpecification" : "TLS_RSA_WITH_AES_256_GCM_SHA384"
+        },
+        "type": "clientConnection"
+      },
+      {
+        "general":
+        {
+          "description": "NWG-OCPZ2"
+        },  
+        "name": "APPQMGR2.2.SVRCONN",
+        "clientConnection": {
+          "connection": [
+            {
+              "host": "appqmgr2-ibm-mq-qm-app-qmgr02.apps.ocpz2.ibmlab.de",
+              "port": 443
+            }
+          ],
+          "queueManager": "APPQMGR2"
+        },
+        "transmissionSecurity": {
+          "cipherSpecification" : "TLS_RSA_WITH_AES_256_GCM_SHA384"
+        },
+        "type": "clientConnection"
+      }
+    ]
+  }
